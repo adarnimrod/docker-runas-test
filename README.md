@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/adarnimrod/docker-runas-test.svg?branch=master)](https://travis-ci.org/adarnimrod/docker-runas-test)
 
-> A test suite for the runas Docker entrypoint. See:
-> <https://www.shore.co.il/blog/docker_uid/> for more explanation.
+> A test suite for the runas Docker entrypoint.
+See [here](https://www.shore.co.il/blog/docker_uid/) for more info.
 
 ## Requirements
 
