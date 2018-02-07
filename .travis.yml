@@ -7,7 +7,7 @@ services:
   - docker
 
 script:
-  - make test clean
+  - bats test.bats
 
 notifications:
   email: false

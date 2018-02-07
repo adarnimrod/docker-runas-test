@@ -46,8 +46,4 @@ dist/
 *.lock
 *.env
 .bundle/
-debian
-ubuntu
-centos
-fedora
-alpine
+*.touch
