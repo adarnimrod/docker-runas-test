@@ -1,0 +1,14 @@
+---
+language: c
+dist: trusty
+sudo: false
+group: beta
+services:
+  - docker
+
+script:
+  - make test clean
+
+notifications:
+  email: false
+  on_failure: never
