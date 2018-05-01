@@ -1,21 +1,15 @@
 ARG image
 FROM ${image}
-RUN if command -v apt-get; \
-    then \
-        apt-get update && apt-get install -y sudo; \
-    elif command -v yum; \
-    then \
-        yum install -y sudo; \
-    elif command -v apk; \
-    then \
-        apk add --update --no-cache sudo; \
-    elif command -v dnf; \
-    then \
-        dnf install -y sudo; \
-    fi
-ARG userland
-ADD [ "https://www.shore.co.il/blog/static/runas-${userland}", "/entrypoint" ]
-ENTRYPOINT [ "/bin/sh", "/entrypoint" ]
+RUN apk add --update --no-cache openssl || true && \
+    wget https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 || \
+    curl -fsSL https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 -o gosu-amd64 && \
+    install -o root -g root -m 755 gosu-amd64 /usr/local/bin/gosu && \
+    rm gosu-amd64 && \
+    wget https://www.shore.co.il/blog/static/runas || \
+    curl -fsSL https://www.shore.co.il/blog/static/runas -o runas && \
+    install -o root -g root -m 755 runas /entrypoint && \
+    rm runas
+ENTRYPOINT [ "/entrypoint" ]
 VOLUME /data
 WORKDIR /data
 ENV HOME /data
