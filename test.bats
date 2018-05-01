@@ -1,13 +1,23 @@
 #!/usr/bin/env bats
 
-_test () {
+_test_root () {
     name="${1:-$BATS_TEST_DESCRIPTION}"
     tag="${2:-latest}"
-    userland="${3:-gnu}"
-    docker build -t "runas-$name" --build-arg "image=$name:$tag" --build-arg "userland=$userland" ./
-    docker run --rm -v "$BATS_TEST_DIRNAME:/data" "runas-$name" touch "$name.touch"
-    test "$(id -u)" = "$(stat -c '%u' $name.touch)"
-    test "$(id -g)" = "$(stat -c '%g' $name.touch)"
+    docker build -t "runas-$name" --build-arg "image=$name:$tag" ./
+    docker run --rm -v "$BATS_TEST_DIRNAME:/data" "runas-$name" touch "$name.root"
+    test "$(id -u)" = "$(stat -c '%u' $name.root)"
+    test "$(id -g)" = "$(stat -c '%g' $name.root)"
+}
+
+_test_user () {
+    name="${1:-$BATS_TEST_DESCRIPTION}"
+    tag="${2:-latest}"
+    user="$(id -u)"
+    group="$(id -g)"
+    docker build -t "runas-$name" --build-arg "image=$name:$tag" ./
+    docker run -u "$user:$group" --rm -v "$BATS_TEST_DIRNAME:/data" "runas-$name" touch "$name.user"
+    test "$user" = "$(stat -c '%u' $name.user)"
+    test "$user" = "$(stat -c '%g' $name.user)"
 }
 
 teardown () {
@@ -15,8 +25,13 @@ teardown () {
     rm -f *.touch
 }
 
-@test "ubuntu" { _test; }
-@test "debian" { _test debian stable-slim; }
-@test "centos" { _test; }
-@test "fedora" { _test; }
-@test "alpine" { _test alpine latest busybox; }
+@test "ubuntu" { _test_root buildpack-deps bionic; }
+@test "debian" { _test_root buildpack-deps stretch; }
+@test "centos" { _test_root; }
+@test "fedora" { _test_root; }
+@test "alpine" { _test_root; }
+@test "ubuntu" { _test_user buildpack-deps bionic; }
+@test "debian" { _test_user buildpack-deps stretch; }
+@test "centos" { _test_user; }
+@test "fedora" { _test_user; }
+@test "alpine" { _test_user; }
