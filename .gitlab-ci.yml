@@ -1,0 +1,7 @@
+---
+test:
+  image: alpine:3.12
+  before_script:
+    - apk add --update docker bats
+  script:
+    - bats .

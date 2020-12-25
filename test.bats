@@ -1,5 +1,3 @@
-#!/usr/bin/env bats
-
 _test_root () {
     name="${1:-$BATS_TEST_DESCRIPTION}"
     tag="${2:-latest}"
