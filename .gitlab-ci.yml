@@ -1,7 +1,4 @@
 ---
-test:
-  image: alpine:3.12
-  before_script:
-    - apk add --update docker bats
-  script:
-    - bats .
+include:
+  - project: shore/ci-templates
+    file: templates/bats.yml

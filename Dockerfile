@@ -1,5 +1,7 @@
 ARG image
+# hadolint ignore=DL3006
 FROM ${image}
+# hadolint ignore=DL3018,DL4001
 RUN apk add --update --no-cache openssl || true && \
     wget https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 || \
     curl -fsSL https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 -o gosu-amd64 && \
